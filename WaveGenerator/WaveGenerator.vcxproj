@@ -19,22 +19,66 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\audioSynth.cpp" />
+    <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\audio_buffer.cpp" />
+    <ClCompile Include="Source\convolution_filter.cpp" />
+    <ClCompile Include="Source\derivative_filter.cpp" />
     <ClCompile Include="Source\Filter.cpp" />
     <ClCompile Include="Source\HarmonicWave.cpp" />
+    <ClCompile Include="Source\leveling_filter.cpp" />
+    <ClCompile Include="Source\low_pass_filter.cpp" />
     <ClCompile Include="Source\SineWave.cpp" />
     <ClCompile Include="Source\SquareWave.cpp" />
+    <ClCompile Include="Source\synthesizer.cpp" />
     <ClCompile Include="Source\TriangleWave.cpp" />
+    <ClCompile Include="Source\utilities.cpp" />
     <ClCompile Include="Source\Wave.cpp" />
     <ClCompile Include="Source\WavGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="imgui\backends\imgui_impl_allegro5.h" />
+    <ClInclude Include="imgui\backends\imgui_impl_android.h" />
+    <ClInclude Include="imgui\backends\imgui_impl_dx10.h" />
+    <ClInclude Include="imgui\backends\imgui_impl_dx11.h" />
+    <ClInclude Include="imgui\backends\imgui_impl_dx12.h" />
+    <ClInclude Include="imgui\backends\imgui_impl_dx9.h" />
+    <ClInclude Include="imgui\backends\imgui_impl_glfw.h" />
+    <ClInclude Include="imgui\backends\imgui_impl_glut.h" />
+    <ClInclude Include="imgui\backends\imgui_impl_metal.h" />
+    <ClInclude Include="imgui\backends\imgui_impl_opengl2.h" />
+    <ClInclude Include="imgui\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="imgui\backends\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="imgui\backends\imgui_impl_osx.h" />
+    <ClInclude Include="imgui\backends\imgui_impl_sdl.h" />
+    <ClInclude Include="imgui\backends\imgui_impl_sdlrenderer.h" />
+    <ClInclude Include="imgui\backends\imgui_impl_vulkan.h" />
+    <ClInclude Include="imgui\backends\imgui_impl_wgpu.h" />
+    <ClInclude Include="imgui\backends\imgui_impl_win32.h" />
+    <ClInclude Include="imgui\misc\cpp\imgui_stdlib.h" />
+    <ClInclude Include="imgui\misc\freetype\imgui_freetype.h" />
+    <ClInclude Include="imgui\misc\single_file\imgui_single_file.h" />
+    <ClInclude Include="Source\audioDataConstants.h" />
+    <ClInclude Include="Source\adaptive_volume_filter.h" />
+    <ClInclude Include="Source\audioSynth.h" />
+    <ClInclude Include="Source\audio_buffer.h" />
+    <ClInclude Include="Source\constants.h" />
+    <ClInclude Include="Source\convolution_filter.h" />
+    <ClInclude Include="Source\delta.h" />
+    <ClInclude Include="Source\derivative_filter.h" />
     <ClInclude Include="Source\Filter.h" />
     <ClInclude Include="Source\HarmonicWave.h" />
     <ClInclude Include="Source\Includes.h" />
+    <ClInclude Include="Source\leveling_filter.h" />
+    <ClInclude Include="Source\low_pass_filter.h" />
+    <ClInclude Include="Source\ring_buffer.h" />
     <ClInclude Include="Source\SineWave.h" />
     <ClInclude Include="Source\SquareWave.h" />
+    <ClInclude Include="Source\synthesizer.h" />
     <ClInclude Include="Source\TriangleWave.h" />
+    <ClInclude Include="Source\utilities.h" />
     <ClInclude Include="Source\Wave.h" />
+    <ClInclude Include="Source\WavGenerator.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -77,19 +121,15 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="wxwidgets.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="wxwidgets.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="wxwidgets.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="wxwidgets.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -129,10 +169,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\rbo1234\Desktop\EngineSynth\Includes;C:\Users\rbo1234\Desktop\EngineSynth\WaveGenerator\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\rbo1234\Desktop\EngineSynth\Dependencies;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies);glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;shell32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -149,6 +192,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>%(AdditionalDependencies);glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;shell32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\rbo1234\Desktop\EngineSynth\Dependencies;</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

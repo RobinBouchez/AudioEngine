@@ -1,126 +1,100 @@
+#include "WavGenerator.h"
 #include "Includes.h"
-
 #include "Wave.h"
 #include "SineWave.h"
 
-using namespace std;
-//------------------------------
-// Global Variables
-//------------------------------
-int gFrequentie;
-float gAmplitude;
-Wave* gWave;
-
-ofstream audioFile;
-
-//------------------------------
-// Fuctions Defines
-//------------------------------
-void Init();
-void Process();
-void End();
-
-
-void WriteToFile(ofstream& file, int value, int size);
-void MakeAudioFile();
-void InputAudioData();
-void ProcessAudioData();
-
-//-----------------------------
-
-int main()
+WavGenerator::WavGenerator()
+    : mAudioFile{}
+    , gAmplitude{}
+    , gFrequentie{}
+    , gWave{}
 {
-    Init(); // INITIALIZE
-
-    Process(); // PROCESING
-
-    End(); // CLEANUP 
 }
 
-//------------------------------
-// Function Declarations
-//------------------------------
-void Init()
+WavGenerator::~WavGenerator()
+{
+}
+
+void WavGenerator::Initialize()
 {
     InputAudioData();
     gWave = new SineWave(gFrequentie, gAmplitude);
 }
 
-void Process()
+void WavGenerator::Run()
 {
     MakeAudioFile();
 }
 
-void End()
+void WavGenerator::Destroy()
 {
     delete gWave;
     gWave = nullptr;
 }
 
 
-void WriteToFile(ofstream& file, int value, int size)
+void WavGenerator::WriteToFile(std::ofstream& file, const int &value, const int &size)
 {
     file.write(reinterpret_cast<const char*> (&value), size);
 }
 
-void MakeAudioFile()
+void WavGenerator::MakeAudioFile()
 {
-    audioFile.open("waveForm.wav", ios::binary); //Open Audio File
+    mAudioFile.open("waveForm.wav", std::ios::binary); //Open Audio File
     
     //Header chunk
-    audioFile << "RIFF"; //chunk ID
-    audioFile << "size"; //chunk data size
-    audioFile << "WAVE"; //RIFF type
+    mAudioFile << "RIFF"; //chunk ID
+    mAudioFile << "size"; //chunk data size
+    mAudioFile << "WAVE"; //RIFF type
 
     //Format chunk
-    audioFile << "fmt "; //chunk ID
-    WriteToFile(audioFile, 16, 4); //chunk data size
-    WriteToFile(audioFile, 1, 2); //compression code
-    WriteToFile(audioFile, 1, 2); //number of channels
-    WriteToFile(audioFile, Wave::g_SampleRate, 4); //sample rate
-    WriteToFile(audioFile, Wave::g_SampleRate * Wave::g_BitDepth / 8, 4); //Average bytes per second
-    WriteToFile(audioFile, Wave::g_BitDepth / 8, 2); //Block align
-    WriteToFile(audioFile, Wave::g_BitDepth, 2); //Significant bits per sample --> bit depth
+    mAudioFile << "fmt "; //chunk ID
+    WriteToFile(mAudioFile, 16, 4); //chunk data size
+    WriteToFile(mAudioFile, 1, 2); //compression code
+    WriteToFile(mAudioFile, 1, 2); //number of channels
+    WriteToFile(mAudioFile, Wave::g_SampleRate, 4); //sample rate
+    WriteToFile(mAudioFile, Wave::g_SampleRate * Wave::g_BitDepth / 8, 4); //Average bytes per second
+    WriteToFile(mAudioFile, Wave::g_BitDepth / 8, 2); //Block align
+    WriteToFile(mAudioFile, Wave::g_BitDepth, 2); //Significant bits per sample --> bit depth
     //WriteToFile(audioFile, ... ); //Extra format bytes
 
     //Data chunk
-    audioFile << "data";
-    audioFile << "size";
+    mAudioFile << "data";
+    mAudioFile << "size";
 
-    int preAudioPosition = int(audioFile.tellp());
+    int preAudioPosition = int(mAudioFile.tellp());
 
     //Audio Data
     ProcessAudioData();
 
-    int postAudioPosition = int(audioFile.tellp());
+    int postAudioPosition = int(mAudioFile.tellp());
 
-    audioFile.seekp(long long int(preAudioPosition) - 4);
-    WriteToFile(audioFile, postAudioPosition - preAudioPosition, 4); //write size to header chunk
+    mAudioFile.seekp(long long int(preAudioPosition) - 4);
+    WriteToFile(mAudioFile, postAudioPosition - preAudioPosition, 4); //write size to header chunk
 
-    audioFile.seekp(4, ios::beg);
-    WriteToFile(audioFile, postAudioPosition - 8, 4); //write size to data chunk
+    mAudioFile.seekp(4, std::ios::beg);
+    WriteToFile(mAudioFile, postAudioPosition - 8, 4); //write size to data chunk
 
-    audioFile.close();
+    mAudioFile.close();
 }
 
-void InputAudioData()
+void WavGenerator::InputAudioData()
 {
     gFrequentie = 440;
     gAmplitude = 0.5;
 
-    cout << "WaveType: " << endl;
-    cout << "Frequency: " << gFrequentie << endl;
-    cout << "Amplitude: " << gAmplitude << endl;
+    std::cout << "WaveType: " << std::endl;
+    std::cout << "Frequency: " << gFrequentie << std::endl;
+    std::cout << "Amplitude: " << gAmplitude << std::endl;
 }
-void ProcessAudioData() 
+void WavGenerator::ProcessAudioData()
 {
-    auto maxAmplitude = pow(2, Wave::g_BitDepth - 1) - 1;
-    for (int i = 0; i < Wave::g_SampleRate * Wave::g_Duration; i++)
+    auto maxAmplitude = pow(2, audioConstants::bitdepth - 1) - 1;
+    for (int i = 0; i < audioConstants::sampleRate * Wave::g_Duration; i++)
     {
         auto sample = gWave->Process();
 
         int intSample = static_cast<int> (sample * maxAmplitude);
-        WriteToFile(audioFile, intSample, 2);
+        WriteToFile(mAudioFile, intSample, 2);
     }
 }
-

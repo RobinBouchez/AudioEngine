@@ -1,6 +1,4 @@
 #include "Wave.h"
-#define _USE_MATH_DEFINES
-#include <cmath>
 #include <stdlib.h>
 
 

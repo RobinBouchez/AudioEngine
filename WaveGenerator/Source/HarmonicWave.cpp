@@ -1,6 +1,4 @@
 #include "HarmonicWave.h"
-#define USE_MATH_DEFINES
-#include <cmath>
 
 HarmonicWave::HarmonicWave(int freq, float amp)
 	: Wave{ freq, amp }

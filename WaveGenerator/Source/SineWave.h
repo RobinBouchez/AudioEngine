@@ -8,4 +8,7 @@ public:
 	virtual ~SineWave() = default;
 	
 	virtual float Process();
+
+private: 
+	float CalculateOffset();
 };

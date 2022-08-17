@@ -1,6 +1,4 @@
 #include "SquareWave.h"
-#define _USE_MATH_DEFINES
-#include <cmath>
 
 SquareWave::SquareWave(int freq, float amp)
 	: Wave{ freq, amp }
